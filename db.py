@@ -20,13 +20,3 @@ def get_topics_sample(limit: int = 5):
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
-
-if __name__ == "__main__":
-    print("Тест подключения к бд")
-    try:
-        data = get_topics_sample(15)
-        print(f"найдено записей: {len(data)}")
-        for item in data:
-            print(f"- {item['topic']} | {item['supervisor']}")
-    except Exception as e:
-        print(f"Ошибка БД: {e}")
