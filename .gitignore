@@ -1,0 +1,46 @@
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*~
+.env
+.env.*
+!.env.example
+venv/
+env/
+.venv/
+ENV/
+
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# Database & Raw Data
+*.db
+*.sqlite
+*.sqlite3
+data/*.csv
+data/*.xlsx
+data/*.docx
+!data/README.md
+
+
+# ML & Runtime Artifacts
+*.faiss
+*.bin
+*.pkl
+*.joblib
+model_cache/
+*.log
