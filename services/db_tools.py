@@ -1,7 +1,7 @@
-from db import get_db_connection
+from .db import get_db_connection
 
 
-def search_topics_keyword(keyword, limit=5) -> list:
+def search_topics_keyword(keyword, limit=5):
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -26,16 +26,7 @@ def search_topics_keyword(keyword, limit=5) -> list:
     return result.strip()
 
 
-def get_random_topics(limit: int = 3) -> list:
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT topic, supervisor FROM student_works ORDER BY RANDOM() LIMIT ?", (limit,))
-    results = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in results]
-
-
-def get_supervisor_topics(supervisor_name: str, limit: int = 3) -> list[dict]:
+def get_supervisor_topics(supervisor_name, limit=3):
     conn = get_db_connection()
     cursor = conn.cursor()
 

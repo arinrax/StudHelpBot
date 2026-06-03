@@ -1,39 +1,21 @@
 import json
 from openai import OpenAI
-from dotenv import load_dotenv
+
+from services.db_tools import search_topics_keyword
+from services.predictor import predict_grade
+from .agent_config import SYSTEM_PROMPT, tools_definition
 
 
-load_dotenv()
 client = OpenAI(
     base_url="http://localhost:11434/v1",
     api_key="ollama",
+    timeout=120.0,
 )
 
-tools_definition = [
-    {
-        "type": "function",
-        "function": {
-            "name": "search_topics_keyword",
-            "description": "Поиск тем курсовых работ в базе данных по ключевому слову. Используй, когда пользователь просит подобрать тему или спрашивает про конкретную область.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "keyword": {
-                        "type": "string",
-                        "description": "Ключевое слово для поиска"
-                    }
-                },
-                "required": ["keyword"]
-            }
-        }
-    }
-]
 
-
-def process_llm_response(user_message: str) -> str:
+def process_response(user_message):
     messages = [
-        {"role": "system",
-         "content": "Ты умный помощник студента. Используй доступные инструменты, чтобы помочь с выбором темы."},
+        {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_message}
     ]
 
@@ -54,11 +36,17 @@ def process_llm_response(user_message: str) -> str:
 
             print(f"LLM вызвала инструмент: {function_name} с аргументами: {function_args}")
 
-            from tools import search_topics_keyword
-
-            if function_name == "search_topics":
+            if function_name == "search_topics_keyword":
                 db_results = search_topics_keyword(function_args.get("keyword", ""))
                 tool_response = json.dumps(db_results, ensure_ascii=False)
+
+            elif function_name == "predict_grade":
+                tool_response = predict_grade(
+                    topic=function_args.get("topic", ""),
+                    supervisor=function_args.get("supervisor", ""),
+                    diploma_avg=function_args.get("diploma_avg"),
+                )
+
             else:
                 tool_response = "Инструмент не найден"
 
