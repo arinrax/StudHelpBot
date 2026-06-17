@@ -1,6 +1,5 @@
-import sqlite3
 import os
-
+import sqlite3
 
 DB_PATH = os.path.join("data", "vkr_archive.db")
 
