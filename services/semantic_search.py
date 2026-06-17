@@ -106,7 +106,7 @@ class SemanticSearch:
             self.build_index()
             return False
 
-    def search(self, query: str, top_k: int = 5, threshold: float = 0.3):
+    def search(self, query, top_k=5, threshold=0.3):
         if not self.index_loaded:
             self.load_index()
 
